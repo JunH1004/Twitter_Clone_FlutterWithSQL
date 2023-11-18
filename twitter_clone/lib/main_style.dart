@@ -12,6 +12,7 @@ var mainTheme = ThemeData(
 class MyColors{
   static final brown = Colors.orangeAccent;
   static final red = Color(0xffe52e31);
+  static final green = Color(0xff2ee546);
   static final deepRed = Color(0xffbe2022);
   static final grey = Color(0xff2a2a2a);
   static final black = Color(0xff191919);
@@ -25,9 +26,32 @@ class MyTextStyles{
   static final h2 = TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.normal);
   static final h2_o = TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 24,fontWeight: FontWeight.normal);
   static final h2_b = TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold);
-  static final h3 = TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.normal);
-  static final h3_w = TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.normal);
+  static final h3 = TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal);
+  static final h3_w = TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.normal);
+  static final h4 = TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.normal);
+  static final h4_w = TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.normal);
   
+}
+class MyButtonStyles{
+  static final b1 = FilledButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(32.0),
+    ),
+    backgroundColor: mainTheme.primaryColor,
+  );
+  static final b1_off = FilledButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(32.0),
+    ),
+    backgroundColor: MyColors.lightGrey,
+  );
+  static final b2 = FilledButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(32.0),
+    ),
+    backgroundColor: mainTheme.canvasColor,
+      side: BorderSide(width: 1, color: Colors.black)
+  );
 }
 
 class CardStyles{
