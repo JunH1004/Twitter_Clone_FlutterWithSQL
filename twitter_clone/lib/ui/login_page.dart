@@ -15,6 +15,12 @@ class _LogInPageState extends State<LogInPage> {
   TextEditingController pwdController = TextEditingController();
 
   @override
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    pwdController.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,6 +54,11 @@ class _LogInPageState extends State<LogInPage> {
                             controller: emailController,
                             decoration: InputDecoration(labelText: 'Email'),
                             keyboardType: TextInputType.emailAddress,
+                            onChanged: (text){
+                              setState(() {
+
+                              });
+                            },
                           ),
                           TextField(
                             controller: pwdController,
@@ -55,11 +66,20 @@ class _LogInPageState extends State<LogInPage> {
                             InputDecoration(labelText: 'Password'),
                             keyboardType: TextInputType.text,
                             obscureText: true, // 비밀번호 안보이도록 하는 것
+                            onChanged: (text){
+                              setState(() {
+
+                              });
+                            },
                           ),
                           SizedBox(height: 40.0,),
+
+                          (emailController.text.isNotEmpty && pwdController.text.isNotEmpty)?
                           GestureDetector(
                             onTap: (){
-                              if(checkLogIn(emailController.value.toString(),pwdController.value.toString())){
+                              print(emailController.text);
+                              print(pwdController.text);
+                              if(checkLogIn(emailController.text,pwdController.text)){
                                 //로그인 성공
                                 Navigator.pushReplacement(
                                     context,
@@ -87,12 +107,22 @@ class _LogInPageState extends State<LogInPage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: mainTheme.primaryColor,
-                                borderRadius: BorderRadius.circular(16)
+                                borderRadius: BorderRadius.circular(32)
                               ),
                               width: double.infinity,
                               height: 50,
                               child: Center(child: Text("로그인하기",style: MyTextStyles.h2,)),
                             ),
+                          )
+                          :
+                          Container(
+                            decoration: BoxDecoration(
+                                color: MyColors.lightGrey,
+                                borderRadius: BorderRadius.circular(32)
+                            ),
+                            width: double.infinity,
+                            height: 50,
+                            child: Center(child: Text("로그인하기",style: MyTextStyles.h2,)),
                           ),
                         ],
                       ),
@@ -105,10 +135,10 @@ class _LogInPageState extends State<LogInPage> {
 }
 
 bool checkLogIn(String email, String pwd){
-  final String sampleEmail = "abc@naver.com";
-  final String samplePwd = "12345";
-
-  if (sampleEmail == email && sampleEmail == pwd){
+  final String sampleEmail = "qwer";
+  final String samplePwd = "qwer";
+  print(sampleEmail.compareTo(email));
+  if (sampleEmail.compareTo(email) == 0 && samplePwd.compareTo(pwd) == 0){
     return true;
   }
   return false;
