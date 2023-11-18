@@ -31,10 +31,12 @@ class _SignUpPageState extends State<SignUpPage> {
         elevation: 0.0,
         backgroundColor: mainTheme.canvasColor,
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
-        ],
+        leading: IconButton(
+            icon: Icon(Icons.keyboard_arrow_left,color: MyColors.black,),
+            onPressed: () {
+              Navigator.pop(context);
+            }
+        )
       ),
       body: Column(
         children: [

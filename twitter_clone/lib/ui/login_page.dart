@@ -29,10 +29,6 @@ class _LogInPageState extends State<LogInPage> {
         elevation: 0.0,
         backgroundColor: mainTheme.canvasColor,
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
-        ],
       ),
       body: Column(
         children: [
@@ -120,7 +116,7 @@ class _LogInPageState extends State<LogInPage> {
                             child: OutlinedButton(
 
                                 onPressed: (){
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
