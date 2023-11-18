@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mysql_client/mysql_client.dart';
+import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/ui/login_page.dart';
 
 import 'main_style.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: mainTheme,
-      home: const LogInPage(),
+      home: const HomePage(),
     );
   }
 }

@@ -16,14 +16,14 @@ class Board extends StatefulWidget {
 class _BoardState extends State<Board> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SliverToBoxAdapter(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.account_circle_outlined,size: 64,),
+              Image.asset('assets/DogeCoin.png',width: 64, height: 64,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
