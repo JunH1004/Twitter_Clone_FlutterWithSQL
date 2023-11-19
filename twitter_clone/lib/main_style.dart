@@ -24,6 +24,7 @@ class MyColors{
 class MyTextStyles{
   static final h1 = TextStyle(color: Colors.black,fontSize: 32,fontWeight: FontWeight.normal);
   static final h2 = TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.normal);
+  static final h2_wb = TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold);
   static final h2_o = TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 24,fontWeight: FontWeight.normal);
   static final h2_b = TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold);
   static final h3 = TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal);

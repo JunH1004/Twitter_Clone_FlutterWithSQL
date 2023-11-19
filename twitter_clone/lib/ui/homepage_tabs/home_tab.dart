@@ -32,12 +32,12 @@ class _HomepageTabState extends State<HomepageTab> {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          pinned: true,
+          pinned: false,
           expandedHeight: 200.0,
-          backgroundColor: mainTheme.canvasColor,
+          backgroundColor: mainTheme.primaryColor,
           flexibleSpace: FlexibleSpaceBar(
-            title: Text('Doge Twitter', style: MyTextStyles.h2_b,),
-            background: Image.asset('assets/DogeCoin.png',width: 400,height: 400,),
+            title: Text('Doge Twitter', style: MyTextStyles.h2_wb,),
+            background: Image.asset('assets/musk.jpg',width: 400,height: 400,fit: BoxFit.fitWidth,),
           ),
         ),
         SliverList(
