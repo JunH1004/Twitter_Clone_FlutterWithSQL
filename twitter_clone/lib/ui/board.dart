@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
 
 class Board extends StatefulWidget {
-  Board(this.userName, this.date, this.content, this.like, this.commentCnt);
+  Board(this.tweetID,this.userName, this.date, this.content, this.like, this.commentCnt);
+  int tweetID;
   String userName;
   String date;
   String content;
@@ -14,9 +15,31 @@ class Board extends StatefulWidget {
 }
 
 class _BoardState extends State<Board> {
+  bool liked = false;
+
+  void addLike(){
+    setState(() {
+      liked = true;
+      widget.like += 1;
+    });
+  }
+
+  void delLike(){
+    setState(() {
+      liked = false;
+      widget.like -= 1;
+    });
+  }
+  @override
+  void initState(){
+    super.initState();
+    //like 개수 쿼리
+    //댓글 개수 쿼리
+    //liked 내가 이 게시물에 좋아요를 눌렀는가? 쿼리
+  }
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
+    return Container(
       child: Column(
         children: [
           Row(
@@ -49,7 +72,20 @@ class _BoardState extends State<Board> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
+              liked?
+              IconButton(
+                  onPressed: (){
+                    delLike();
+                  },
+                  icon: Icon(Icons.favorite,color: MyColors.red,))
+              :
+              IconButton(
+                  onPressed: (){
+                    addLike();
+                  },
+                  icon: Icon(Icons.favorite_border)
+              )
+              ,
               Text(widget.commentCnt.toString()),
               IconButton(onPressed: (){}, icon: Icon(Icons.comment)),
               Text(widget.commentCnt.toString(),

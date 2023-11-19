@@ -3,10 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 
-Set<Set<String>> dummyContent = {
-  {'1', '이준혁', '나 이준혁 아니다',},
-  {'2', '이준민', '나 이준혁 맞다',},
-  {'3', '엄준식', '엄마가 준비한 식사는 최고야',},
+Set<Set<String>> dummyTweets = {
+  //tweet id, user id, content, created at
+  {'1', '이준혁', '나 이준혁 아니다', '2004.02.18'},
+  {'2', '이준민', '나 이준혁 맞다', '2004.02.18'},
+  {'3', '엄준식', '엄마가 준비한 식사는 최고야', '2004.02.18'},
+  {'1', '이준혁', '나 이준혁 아니다', '2004.02.18'},
+  {'2', '이준민', '나 이준혁 맞다', '2004.02.18'},
+  {'3', '엄준식', '엄마가 준비한 식사는 최고야', '2004.02.18'},
+  {'1', '이준혁', '나 이준혁 아니다', '2004.02.18'},
+  {'2', '이준민', '나 이준혁 맞다', '2004.02.18'},
+  {'3', '엄준식', '엄마가 준비한 식사는 최고야', '2004.02.18'},
+  {'1', '이준혁', '나 이준혁 아니다', '2004.02.18'},
+  {'2', '이준민', '나 이준혁 맞다', '2004.02.18'},
+  {'3', '엄준식', '엄마가 준비한 식사는 최고야', '2004.02.18'},
 };
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -37,12 +47,21 @@ class _HomePageState extends State<HomePage> {
                 background: Image.asset('assets/DogeCoin.png',width: 400,height: 400,),
               ),
             ),
-            Board('이준혁','2099.13.32.','나 이준혁 아니다', 1,3 ),
-            Board('LeeJunMin','2099.13.34.','가나다라마바사아자차카타파하ABCDEFGHIJK', 99,3 ),
-            Board('LeeJunMin','2099.13.34.','가나다라마바사아자차카타파하ABCDEFGHIJK가나다라마바사아자차카타파하ABCDEFGHIJK가나다라마바사아자차카타파하ABCDEFGHIJK', 99,3 ),
-          Board('이준혁','2099.13.32.','나 이준혁 아니다', 1,3 ),
-          Board('이준혁','2099.13.32.','나 이준혁 아니다', 1,3 ),
-          Board('이준혁','2099.13.32.','나 이준혁 아니다', 1,3 ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return Board(
+                  0,
+                  dummyTweets.elementAt(index).elementAt(1), // 인덱스 1이 사용자 이름이라고 가정합니다
+                  dummyTweets.elementAt(index).elementAt(3),
+                  dummyTweets.elementAt(index).elementAt(2), // 인덱스 2가 트윗 내용이라고 가정합니다
+                  1,
+                  3,
+                );
+              },
+              childCount: dummyTweets.length,
+            ),
+          ),
           ],
         ),
 
