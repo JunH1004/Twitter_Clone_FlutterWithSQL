@@ -50,7 +50,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: mainTheme,
-      home: const HomePage(),
+      home: Container(
+          color: mainTheme.canvasColor,
+          child: const HomePage()),
     );
   }
 }
