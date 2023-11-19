@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
+import 'package:twitter_clone/ui/profile_page.dart';
 Set<Set<String>> dummyProfiles = {
   //user id, user name 여기는 view 사용하면 좋을듯?
   {'1', '이준혁'},
@@ -138,7 +139,17 @@ class _SearchListState extends State<SearchList> {
             child: Row(
               children: [
                 Image.asset('assets/DogeCoin.png',width: 64, height: 64,),
-                Text(dummyProfiles.elementAt(index).elementAt(1), style: MyTextStyles.h2_b,)
+                TextButton(
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              ProfilePage(0, '카리나')
+                        )
+                      );
+                    },
+                    child: Text(dummyProfiles.elementAt(index).elementAt(1), style: MyTextStyles.h2_b,)
+                )
+
               ],
             ),
           );

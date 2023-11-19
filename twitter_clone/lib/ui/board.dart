@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
+import 'package:twitter_clone/ui/profile_page.dart';
 
 class Board extends StatefulWidget {
   Board(this.tweetID,this.userName, this.date, this.content, this.like, this.commentCnt);
@@ -54,7 +55,11 @@ class _BoardState extends State<Board> {
                   children: [
                     Row(
                       children: [
-                        Text(widget.userName,style: MyTextStyles.h2_b,),
+                        TextButton(onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ProfilePage(0, '카리나')));
+                        }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
                         Text('@${widget.date}', style: MyTextStyles.h2_o,)
                       ],
                     ),
