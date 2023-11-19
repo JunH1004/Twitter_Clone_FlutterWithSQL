@@ -6,13 +6,16 @@ import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
 import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
 
 Set<Set<String>> dummyTweets = {
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
-  {'1', '카리나', '나 카리나 아니다', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
+  {'1', 'Name', 'Content', '2004.02.18'},
 };
 class ProfilePage extends StatefulWidget {
   int userId;

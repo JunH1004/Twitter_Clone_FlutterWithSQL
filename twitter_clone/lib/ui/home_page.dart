@@ -4,6 +4,7 @@ import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
 import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
+import 'package:twitter_clone/ui/post_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -29,7 +30,16 @@ class _HomePageState extends State<HomePage> {
           HomepageTab(),
           SearchTab()
         ][_mainIndex],
-
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: mainTheme.primaryColor,
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => PostPage()));
+            },
+            child: Center(
+              child: Icon(Icons.add,size: 32,),
+            ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           currentIndex: _mainIndex,

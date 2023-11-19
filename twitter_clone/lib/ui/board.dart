@@ -58,7 +58,7 @@ class _BoardState extends State<Board> {
                         TextButton(onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  ProfilePage(0, '카리나')));
+                                  ProfilePage(0, 'Name')));
                         }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
                         Text('@${widget.date}', style: MyTextStyles.h2_o,)
                       ],
