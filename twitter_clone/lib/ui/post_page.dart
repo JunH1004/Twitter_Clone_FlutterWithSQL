@@ -13,6 +13,7 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   TextEditingController postController = TextEditingController();
   bool isPostButtonEnabled = false;
+  int maxCharacterLimit = 25;
 
   @override
   void dispose() {
@@ -60,19 +61,28 @@ class _PostPageState extends State<PostPage> {
           )
         ],
       ),
-      body: TextField(
-        maxLines: 5,
-        controller: postController,
-        onChanged: (value) {
-          // TextField의 내용이 변경될 때 호출되는 콜백
-          setState(() {
-            // 버튼 활성화 여부 업데이트
-            isPostButtonEnabled = value.trim().isNotEmpty;
-          });
-        },
-        decoration: InputDecoration(
-          hintText: '무슨 일이 일어나고 있나요?',
-          // 여기에서 다른 외관 속성을 사용자 정의할 수 있습니다.
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              maxLines: 5,
+              maxLength: maxCharacterLimit,
+              controller: postController,
+              onChanged: (value) {
+                // TextField의 내용이 변경될 때 호출되는 콜백
+                setState(() {
+                  // 버튼 활성화 여부 업데이트
+                  isPostButtonEnabled = value.trim().isNotEmpty;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: '무슨 일이 일어나고 있나요?',
+                // 여기에서 다른 외관 속성을 사용자 정의할 수 있습니다.
+              ),
+            ),
+            SizedBox(height: 8),
+          ],
         ),
       ),
     );
