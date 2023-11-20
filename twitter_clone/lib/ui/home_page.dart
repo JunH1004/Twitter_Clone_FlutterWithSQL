@@ -23,14 +23,16 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Container(
+      color: mainTheme.canvasColor,
+      child: SafeArea(
 
-      child: Scaffold(
-        body: [
-          HomepageTab(),
-          SearchTab()
-        ][_mainIndex],
-        floatingActionButton: FloatingActionButton(
+        child: Scaffold(
+          body: [
+            HomepageTab(),
+            SearchTab()
+          ][_mainIndex],
+          floatingActionButton: FloatingActionButton(
             backgroundColor: mainTheme.primaryColor,
             onPressed: (){
               Navigator.push(context, MaterialPageRoute(
@@ -39,22 +41,23 @@ class _HomePageState extends State<HomePage> {
             child: Center(
               child: Icon(Icons.add,size: 32,),
             ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          currentIndex: _mainIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: ""
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-            label: ""
-            ),
-          ],
-          selectedItemColor: mainTheme.primaryColor,
-          onTap: _onItemTapped,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
+            currentIndex: _mainIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: ""
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+              label: ""
+              ),
+            ],
+            selectedItemColor: mainTheme.primaryColor,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );

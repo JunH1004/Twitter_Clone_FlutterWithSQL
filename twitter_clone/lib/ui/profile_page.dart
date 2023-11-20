@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: IconButton(
                   icon: Icon(Icons.keyboard_arrow_left,color: MyColors.black,),
                   onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName("/"));
+                    Navigator.pop(context, (route) => route.isFirst);
                   }
               )
           ),
