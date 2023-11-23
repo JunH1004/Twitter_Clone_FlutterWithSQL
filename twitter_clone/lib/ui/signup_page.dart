@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/ui/login_page.dart';
@@ -25,6 +27,9 @@ class _SignUpPageState extends State<SignUpPage> {
   }
   @override
   Widget build(BuildContext context) {
+    void signUp(String name, String email, String pwd){
+      context.read<DatabaseProvider>().signUp(email, name, pwd);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign Up',style: MyTextStyles.h2,),
@@ -121,7 +126,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                               LogInPage()));
                                 }
                                 else{
-                                  //회원가입 실패
+                                  //회원가입 실패 - 비번 다름
+                                  pwdController.clear();
+                                  pwdController2.clear();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       backgroundColor: MyColors.red,
@@ -133,7 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               child: Center(child: Text("회원가입",style: MyTextStyles.h3,)))
                               :
                           FilledButton(
-                            style: MyButtonStyles.b1,
+                            style: MyButtonStyles.b1_off,
                               onPressed:(){},
                               child: Center(child: Text("회원가입",style: MyTextStyles.h3,))
                           ),
@@ -152,8 +159,5 @@ bool checkSamePwd(String pwd, String pwd1){
     return true;
   }
   return false;
-}
-void signUp(String name, String email, String pwd){
-  print('회원가입 : $name, $email, $pwd');
 }
 

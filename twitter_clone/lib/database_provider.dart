@@ -53,4 +53,13 @@ class DatabaseProvider extends ChangeNotifier {
     }
     return false;
   }
+
+  Future<void> signUp(String email, String name, String pwd) async{
+    String q =
+        "INSERT INTO User (Email, user_name, password, Follower_Cnt, Following_Cnt)"
+        "VALUES ('$email', '$name', '$pwd', 0, 0)";
+    //INSERT INTO User (Email, user_name, password, Follower_Cnt, Following_Cnt)
+    // VALUES ('user@example.com', 'UserName', 'user_password', 0, 0);
+    query(q);
+  }
 }
