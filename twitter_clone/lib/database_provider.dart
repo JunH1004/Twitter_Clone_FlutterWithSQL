@@ -21,8 +21,7 @@ class DatabaseProvider extends ChangeNotifier {
 
 
   Future<IResultSet> query(String q) async {
-    print("Connecting to mysql server...");
-
+    print('query : ' + q);
     // MySQL 접속 설정
     final conn = await MySQLConnection.createConnection(
       host: 'localhost',
@@ -32,7 +31,6 @@ class DatabaseProvider extends ChangeNotifier {
       databaseName: 'dogetest', // optional
     );
     await conn.connect();
-    print("connected");
     var result = await conn.execute(
       q,
     );
@@ -43,6 +41,14 @@ class DatabaseProvider extends ChangeNotifier {
   Future<bool> isExistUserEmail(String user_email) async {
     IResultSet result = await query("SELECT * FROM user WHERE email = '$user_email'");
     if (result.numOfRows > 0){
+      return true;
+    }
+    return false;
+  }
+  Future<bool> isRightPWD(String user_email, String pwd) async {
+    //이메일이 존재한다는 가정하에 실행
+    IResultSet result = await query("SELECT password FROM user WHERE email = '$user_email'");
+    if (result.rows.elementAt(0).colAt(0) == pwd){
       return true;
     }
     return false;

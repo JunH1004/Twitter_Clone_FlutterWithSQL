@@ -1,5 +1,8 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/ui/signup_page.dart';
@@ -23,6 +26,27 @@ class _LogInPageState extends State<LogInPage> {
   }
   @override
   Widget build(BuildContext context) {
+
+    Future<bool> checkLogIn(String email, String pwd) async {
+      if(await context.read<DatabaseProvider>().isExistUserEmail(email)){
+        if(await context.read<DatabaseProvider>().isRightPWD(email,pwd)){
+          return true;
+        }
+        else{
+          //틀린 비번
+          print("비번 틀림!");
+          return false;
+        }
+      }
+      else
+        {
+          //존재하지 않는 메일
+          print("존재하지 않는 메일!");
+          return false;
+        }
+      return false;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Log In',style: MyTextStyles.h2,),
@@ -74,10 +98,10 @@ class _LogInPageState extends State<LogInPage> {
                           (emailController.text.isNotEmpty && pwdController.text.isNotEmpty)?
                           FilledButton(
                             style: MyButtonStyles.b1,
-                              onPressed: (){
+                              onPressed: () async {
                                 print(emailController.text);
                                 print(pwdController.text);
-                                if(checkLogIn(emailController.text,pwdController.text)){
+                                if(await checkLogIn(emailController.text,pwdController.text)){
                                   //로그인 성공
                                   Navigator.pushReplacement(
                                       context,
@@ -87,6 +111,8 @@ class _LogInPageState extends State<LogInPage> {
                                 }
                                 else{
                                   //로그인 실패
+                                  emailController.clear();
+                                  pwdController.clear();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       backgroundColor: MyColors.red,
@@ -134,15 +160,5 @@ class _LogInPageState extends State<LogInPage> {
       ),
     );
   }
-}
-
-bool checkLogIn(String email, String pwd){
-  final String sampleEmail = "qwer";
-  final String samplePwd = "qwer";
-  print(sampleEmail.compareTo(email));
-  if (sampleEmail.compareTo(email) == 0 && samplePwd.compareTo(pwd) == 0){
-    return true;
-  }
-  return false;
 }
 
