@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/ui/login_page.dart';
+import 'package:twitter_clone/user_info_provider.dart';
 
 import 'main_style.dart';
 
@@ -14,6 +15,7 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider<DatabaseProvider>(create: (_) => DatabaseProvider()),
+          ChangeNotifierProvider<UserInfoProvider>(create: (_) => UserInfoProvider()),
         ],
         child: MyApp(),
       )

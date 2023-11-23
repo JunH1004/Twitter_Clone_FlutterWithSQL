@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/home_page.dart';
+import 'package:twitter_clone/user_info_provider.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({Key? key}) : super(key: key);
@@ -39,24 +42,13 @@ class _PostPageState extends State<PostPage> {
             child: FilledButton(
               style: MyButtonStyles.b1,
               onPressed: isPostButtonEnabled
-                  ? () {
-                // 게시물 내용 유효성 검사
-                String postContent = postController.text.trim();
-                if (postContent.isNotEmpty) {
-                  // TODO: 여기에 게시물 제출 로직을 구현하세요.
-                  // 예를 들어, 게시물 내용을 서버로 전송하거나
-                  // 새로운 게시물로 앱 상태를 업데이트할 수 있습니다.
-                  print("게시 중: $postContent");
-
-                  // PostPage 닫기
-                  Navigator.pop(context);
-                } else {
-                  // 게시물 내용이 비어 있으면 오류 메시지 표시 또는 제출 방지
-                  print("오류: 게시물 내용이 비어 있습니다");
-                }
+                  ? () async {
+                int user_id = context.read<UserInfoProvider>().getUserId();
+                await context.read<DatabaseProvider>().postTweet(user_id, postController.text);
+                Navigator.pop(context, (route) => route.isFirst);
               }
                   : null, // 버튼이 비활성화 상태인 경우 null로 설정
-              child: Center(child: Text("게시", style: MyTextStyles.h3_w)),
+              child: Center(child: Text("Post", style: MyTextStyles.h3_w)),
             ),
           )
         ],

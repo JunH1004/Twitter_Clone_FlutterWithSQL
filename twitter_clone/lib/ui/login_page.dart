@@ -6,6 +6,7 @@ import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/ui/signup_page.dart';
+import 'package:twitter_clone/user_info_provider.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -30,6 +31,11 @@ class _LogInPageState extends State<LogInPage> {
     Future<bool> checkLogIn(String email, String pwd) async {
       if(await context.read<DatabaseProvider>().isExistUserEmail(email)){
         if(await context.read<DatabaseProvider>().isRightPWD(email,pwd)){
+          //로그인 성공
+
+          //유저 id 가져오기 쿼리 and 로컬에 저장
+          int user_id = await context.read<DatabaseProvider>().getUserId(email);
+          context.read<UserInfoProvider>().setUserId(user_id);
           return true;
         }
         else{

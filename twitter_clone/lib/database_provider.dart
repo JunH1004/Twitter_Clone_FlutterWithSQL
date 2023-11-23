@@ -62,4 +62,21 @@ class DatabaseProvider extends ChangeNotifier {
     // VALUES ('user@example.com', 'UserName', 'user_password', 0, 0);
     query(q);
   }
+
+  Future<int> getUserId(String user_email) async {
+    IResultSet result = await query("SELECT user_id FROM user WHERE email = '$user_email'");
+    if (result.numOfRows > 0){
+      print('user_id : ${int.parse(result.rows.elementAt(0).colAt(0).toString())}');
+      return int.parse(result.rows.elementAt(0).colAt(0).toString());
+    }
+    return -1;
+  }
+
+  Future<void> postTweet(int user_id, String content) async{
+    String q =
+        """INSERT INTO tweet (user_id, content) VALUES ($user_id, '$content')""";
+    query(q);
+  }
+
+
 }
