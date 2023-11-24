@@ -219,4 +219,37 @@ class DatabaseProvider extends ChangeNotifier {
     }
     return user_info;
   }
+
+  Future<List<Map<String, dynamic>>> getFollowings(int user_id) async {
+    //유저가 팔로우 하는 사람!
+    String q =
+        "SELECT User.user_id, User.user_name "
+        "FROM Following "
+        "JOIN User ON Following.Following_id = User.user_id "
+        "WHERE Following.user_id = $user_id;";
+
+    IResultSet result =  await query(q);
+    List<Map<String, dynamic>> followings = [];
+    for (final row in result.rows) {
+      followings.add(row.assoc());
+      print(row.assoc());
+    }
+    return followings;
+  }
+
+  Future<List<Map<String, dynamic>>> getFollowers(int user_id) async {
+    //유저를 팔로우하는 사람!
+    String q =
+        "SELECT User.user_id, User.user_name "
+        "FROM Follower "
+        "JOIN User ON Follower.follower_id = User.user_id "
+        "WHERE Follower.user_id = $user_id;";
+
+    IResultSet result =  await query(q);
+    List<Map<String, dynamic>> followings = [];
+    for (final row in result.rows) {
+      followings.add(row.assoc());
+    }
+    return followings;
+  }
 }

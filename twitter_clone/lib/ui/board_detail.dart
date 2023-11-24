@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
-import 'package:twitter_clone/ui/profile_page.dart';
+import 'package:twitter_clone/ui/profile/profile_page.dart';
 
 class BoardDetailPage extends StatefulWidget {
   BoardDetailPage(this.tweetID,this.userName, this.date, this.content, this.like, this.commentCnt);

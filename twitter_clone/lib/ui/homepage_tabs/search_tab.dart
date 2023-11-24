@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
-import 'package:twitter_clone/ui/profile_page.dart';
+import 'package:twitter_clone/ui/profile/profile_page.dart';
 Set<Set<String>> dummyProfiles = {
   //user id, user name 여기는 view 사용하면 좋을듯?
   {'1', 'Name1'},

@@ -4,7 +4,10 @@ import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/components/follow_btn.dart';
+import 'package:twitter_clone/ui/profile/following_list_page.dart';
 import 'package:twitter_clone/user_info_provider.dart';
+
+import 'follower_list_page.dart';
 
 class ProfilePage extends StatefulWidget {
   int userId;
@@ -144,8 +147,24 @@ class _UserFollowInfoState extends State<UserFollowInfo> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('$following Following'),
-              Text('$followers Follower'),
+              TextButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            FollowingListPage(int.parse(userInfo['user_id']))
+                    ));
+                  },
+                  child: Text('$following Following'),
+              ),
+              TextButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          FollowerListPage(int.parse(userInfo['user_id']))
+                  ));
+                },
+                child:Text('$followers Follower'),
+              ),
             ],
           );
         }
