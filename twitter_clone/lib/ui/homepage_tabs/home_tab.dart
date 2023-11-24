@@ -45,6 +45,7 @@ class _HomepageTabState extends State<HomepageTab> {
                 (BuildContext context, int index) {
               return Board(
                 0,
+                1,
                 dummyTweets.elementAt(index).elementAt(1), // 인덱스 1이 사용자 이름이라고 가정합니다
                 dummyTweets.elementAt(index).elementAt(3),
                 dummyTweets.elementAt(index).elementAt(2), // 인덱스 2가 트윗 내용이라고 가정합니다

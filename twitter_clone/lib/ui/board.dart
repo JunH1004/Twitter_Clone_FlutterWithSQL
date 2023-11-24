@@ -4,8 +4,9 @@ import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/profile_page.dart';
 
 class Board extends StatefulWidget {
-  Board(this.tweetID,this.userName, this.date, this.content, this.like, this.commentCnt);
+  Board(this.tweetID,this.userID, this.userName, this.date, this.content, this.like, this.commentCnt);
   int tweetID;
+  int userID;
   String userName;
   String date;
   String content;
@@ -58,7 +59,7 @@ class _BoardState extends State<Board> {
                         TextButton(onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  ProfilePage(0, 'Name')));
+                                  ProfilePage(widget.userID, widget.userName)));
                         }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
                         Text('@${widget.date}', style: MyTextStyles.h2_o,)
                       ],

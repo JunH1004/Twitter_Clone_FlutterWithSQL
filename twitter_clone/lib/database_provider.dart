@@ -94,6 +94,7 @@ class DatabaseProvider extends ChangeNotifier {
         """INSERT INTO tweet (user_id, content) VALUES ($user_id, '$content')""";
     query(q);
   }
+
   Future<List<Map<String, dynamic>>> getLatestTweets(int n) async {
     //List
     //Map< user_id:, content:, user_name:, created_at: >
@@ -114,5 +115,23 @@ class DatabaseProvider extends ChangeNotifier {
     return tweets;
   }
 
+  Future<List<Map<String, dynamic>>> getUserTweets(int user_id) async {
+    //List
+    //Map< user_id:, content:, user_name:, created_at: >
 
+    String q =
+        'SELECT tweet.user_id, user.user_name, tweet.content, tweet.created_at '
+        'FROM tweet '
+        'JOIN user ON tweet.user_id = user.user_id '
+        'WHERE user.user_id = $user_id '
+        'ORDER BY tweet.created_at DESC; ';
+    IResultSet result =  await query(q);
+    List<Map<String, dynamic>> tweets = [];
+    for (final row in result.rows) {
+      // for every row in result set
+      tweets.add(row.assoc());
+      print(row.assoc());
+    }
+    return tweets;
+  }
 }
