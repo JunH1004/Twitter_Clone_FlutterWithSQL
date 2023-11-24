@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
+import 'package:twitter_clone/ui/components/follow_btn.dart';
 import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
 import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
+import 'package:twitter_clone/user_info_provider.dart';
 class ProfilePage extends StatefulWidget {
   int userId;
   String userName;
@@ -15,10 +18,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
+  bool isMe = false; //프로필이 자신인 경우
   //init 유저 id로 그 유저가 무슨 글 썼는데 가져오기
   @override
+  void initState(){
+    super.initState();
+    if (context.read<UserInfoProvider>().getUserId() == widget.userId){
+      isMe = true;
+      print('isME');
+    }
+  }
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -36,7 +48,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   }
               )
           ),
-          UserTweets(widget.userId)
+          SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                isMe == false?
+                FollowBtn(widget.userId):Container(),
+
+              ],
+            ),
+          ),
+          //UserTweets(widget.userId)
         ],
       ),
     );

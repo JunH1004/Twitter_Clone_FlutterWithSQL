@@ -134,4 +134,74 @@ class DatabaseProvider extends ChangeNotifier {
     }
     return tweets;
   }
+
+  //user <- follower_id, 다른사람이 유저를 팔로우
+  //user -> following_id, 유저가 다른 사람을 팔로우
+  Future<bool> amIFollowHim(int myID, int hisID) async{
+    String q =
+        "SELECT * FROM following "
+        "WHERE following_id = $hisID AND user_id = $myID;";
+    //INSERT INTO User (Email, user_name, password, Follower_Cnt, Following_Cnt)
+    // VALUES ('user@example.com', 'UserName', 'user_password', 0, 0);
+    IResultSet result = await query(q);
+    if (result.numOfRows > 0){
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> follow(int myID, int hisID) async{
+    String q =
+        "INSERT INTO following (user_id, following_id, created_at) "
+        "VALUES ($myID, $hisID, NOW());";
+    await query(q);
+    //내가 그사람을 팔로우한다 쿼리
+
+    q =
+        "INSERT INTO follower (user_id, follower_id, created_at) "
+        "VALUES ($hisID, $myID, NOW());";
+    await query(q);
+    //그사람이 나한테 팔로우 된다 쿼리
+
+    q =
+    "UPDATE user "
+    "SET follower_cnt = follower_cnt + 1 "
+    "WHERE user_id = $hisID; " ;
+    await query(q);
+
+    q =
+    "UPDATE user "
+    "SET following_cnt = following_cnt + 1 "
+    "WHERE user_id = $myID; " ;
+    await query(q);
+  }
+
+  Future<void> unfollow(int myID, int hisID) async {
+    // Unfollow 관계 삭제
+    String q1 =
+        "DELETE FROM following "
+        "WHERE user_id = $myID AND following_id = $hisID;";
+    await query(q1);
+
+    // Unfollow 되는 사용자의 팔로워 관계 삭제
+    String q2 =
+        "DELETE FROM follower "
+        "WHERE user_id = $hisID AND follower_id = $myID;";
+    await query(q2);
+
+    // Unfollow 되는 사용자의 팔로워 수 감소
+    String q3 =
+        "UPDATE user "
+        "SET follower_cnt = follower_cnt - 1 "
+        "WHERE user_id = $hisID;";
+    await query(q3);
+
+    // 내 팔로잉 수 감소
+    String q4 =
+        "UPDATE user "
+        "SET following_cnt = following_cnt - 1 "
+        "WHERE user_id = $myID;";
+    await query(q4);
+  }
+
 }
