@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/profile_page.dart';
@@ -9,20 +11,7 @@ Set<Set<String>> dummyProfiles = {
   {'2', 'Name2'},
   {'3', 'Name3'},
 };
-Set<Set<String>> dummyTweets = {
-  //내가 팔로우 안 하는 사람들 or 그냥 전체에서 아무거나
-  //tweet id, user id, content, created at
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-  {'1', 'Name', 'Content', '2004.02.18'},
-};
+List<Map<String, dynamic>> tweets = [];
 class SearchTab extends StatefulWidget {
   const SearchTab({Key? key}) : super(key: key);
 
@@ -32,7 +21,10 @@ class SearchTab extends StatefulWidget {
 
 class _SearchTabState extends State<SearchTab> {
   int isSearch = 0;
-
+  @override
+  void initState(){
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -91,7 +83,6 @@ class _SearchTabState extends State<SearchTab> {
     );
   }
 }
-
 class RecommandTweets extends StatefulWidget {
   const RecommandTweets({Key? key}) : super(key: key);
 
@@ -100,25 +91,60 @@ class RecommandTweets extends StatefulWidget {
 }
 
 class _RecommandTweetsState extends State<RecommandTweets> {
+  Future<List<Map<String, dynamic>>>? tweetsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    tweetsFuture = DatabaseProvider().getLatestTweets(10);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-          return Board(
-            0,
-            dummyTweets.elementAt(index).elementAt(1), // 인덱스 1이 사용자 이름이라고 가정합니다
-            dummyTweets.elementAt(index).elementAt(3),
-            dummyTweets.elementAt(index).elementAt(2), // 인덱스 2가 트윗 내용이라고 가정합니다
-            1,
-            3,
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: tweetsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
-        },
-        childCount: dummyTweets.length,
-      ),
+        } else if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('No tweets available.'),
+            ),
+          );
+        } else {
+          List<Map<String, dynamic>> tweets = snapshot.data!;
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return Board(
+                  0,
+                  tweets[index]['user_name'].toString(),
+                  tweets[index]['created_at'].toString(),
+                  tweets[index]['content'].toString(),
+                  1,
+                  3,
+                );
+              },
+              childCount: tweets.length,
+            ),
+          );
+        }
+      },
     );
   }
 }
+
 
 class SearchList extends StatefulWidget {
   const SearchList({Key? key}) : super(key: key);
@@ -157,3 +183,4 @@ class _SearchListState extends State<SearchList> {
     );
   }
 }
+
