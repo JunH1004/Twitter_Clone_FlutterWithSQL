@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/components/follow_btn.dart';
-import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
-import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
 import 'package:twitter_clone/user_info_provider.dart';
+
 class ProfilePage extends StatefulWidget {
   int userId;
   String userName;
+
   ProfilePage(this.userId, this.userName);
 
   @override
@@ -18,19 +17,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool isMe = false; //프로필이 자신인 경우
-  //init 유저 id로 그 유저가 무슨 글 썼는데 가져오기
+  bool isMe = false;
+  int followingCount = 0;
+  int followerCount = 0;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    if (context.read<UserInfoProvider>().getUserId() == widget.userId){
+    if (context.read<UserInfoProvider>().getUserId() == widget.userId) {
       isMe = true;
       print('isME');
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -39,35 +40,125 @@ class _ProfilePageState extends State<ProfilePage> {
             expandedHeight: 200.0,
             backgroundColor: mainTheme.canvasColor,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.userName, style: MyTextStyles.h2_b,),
+              title: Text(widget.userName, style: MyTextStyles.h2_b),
             ),
-              leading: IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left,color: MyColors.black,),
-                  onPressed: () {
-                    Navigator.pop(context, (route) => route.isFirst);
-                  }
-              )
+            leading: IconButton(
+              icon: Icon(Icons.keyboard_arrow_left, color: MyColors.black),
+              onPressed: () {
+                Navigator.pop(context, (route) => route.isFirst);
+              },
+            ),
           ),
           SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                isMe == false?
-                FollowBtn(widget.userId):Container(),
-
-              ],
+            child: Container(
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: UserFollowInfo(widget.userId, onUpdate: _updateCounts),
+                  ),
+                  Expanded(
+                    child:
+                        Container(
+                          margin: EdgeInsets.fromLTRB(64, 0, 0, 0),
+                          child:
+                            isMe == false?
+                            FollowBtn(widget.userId, onUpdate: _updateCounts)
+                            :
+                            ElevatedButton(
+                              style: MyButtonStyles.b1_off,
+                              onPressed: () {},
+                              child: Text("Edit profile", style: MyTextStyles.h3_w),
+                            )
+                        )
+                  ),
+                ],
+              ),
             ),
           ),
-          //UserTweets(widget.userId)
+          UserTweets(widget.userId),
         ],
       ),
+    );
+  }
+
+  // 팔로잉 및 팔로워 수 업데이트
+  void _updateCounts() {
+    setState(() {
+    });
+  }
+}
+
+class UserFollowInfo extends StatefulWidget {
+  UserFollowInfo(this.userID, {required this.onUpdate});
+
+  final int userID;
+  final Function() onUpdate;
+
+  @override
+  State<UserFollowInfo> createState() => _UserFollowInfoState();
+}
+
+class _UserFollowInfoState extends State<UserFollowInfo> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: DatabaseProvider().getUserInfo(widget.userID),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('0 Following'),
+              Text('0 Follower'),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('0 Following'),
+              Text('0 Follower'),
+            ],
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('0 Following'),
+              Text('0 Follower'),
+            ],
+          );
+        } else {
+          Map<String, dynamic> userInfo = snapshot.data!;
+          int following = int.parse(userInfo['following_cnt']);
+          int followers = int.parse(userInfo['follower_cnt']); // 업데이트 콜백 호출
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('$following Following'),
+              Text('$followers Follower'),
+            ],
+          );
+        }
+      },
     );
   }
 }
 
 class UserTweets extends StatefulWidget {
   UserTweets(this.userID);
+
   int userID;
+
   @override
   State<UserTweets> createState() => _UserTweetsState();
 }

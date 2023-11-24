@@ -204,4 +204,19 @@ class DatabaseProvider extends ChangeNotifier {
     await query(q4);
   }
 
+  Future<Map<String, dynamic>> getUserInfo(int user_id) async {
+
+    String q =
+        "SELECT user_id, email, user_name, follower_cnt, following_cnt "
+        "FROM user "
+        "WHERE user_id = $user_id;";
+
+    IResultSet result =  await query(q);
+    Map<String, dynamic> user_info = {};
+    for (final row in result.rows) {
+      user_info = row.assoc();
+      print(row.assoc());
+    }
+    return user_info;
+  }
 }
