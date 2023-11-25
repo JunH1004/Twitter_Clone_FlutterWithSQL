@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
+import 'package:twitter_clone/ui/change_pwd_page.dart';
 import 'package:twitter_clone/ui/home_page.dart';
 import 'package:twitter_clone/user_info_provider.dart';
 
@@ -113,7 +114,10 @@ class _ConfigPageState extends State<ConfigPage> {
             child: FilledButton(
               style: MyButtonStyles.b3,
               onPressed:() {
-
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ChangePwdPage()
+                ));
               }, // 버튼이 비활성화 상태인 경우 null로 설정
               child: Center(child: Text("Change PWD", style: MyTextStyles.h3_w)),
             ),

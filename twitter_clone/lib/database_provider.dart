@@ -359,4 +359,11 @@ class DatabaseProvider extends ChangeNotifier {
     query(q);
   }
 
+  Future<void> updatePWD(int user_id, String PWD) async {
+    String q =
+        "UPDATE user "
+        "SET password = '$PWD' "
+        "WHERE user_id = $user_id;";
+    query(q);
+  }
 }
