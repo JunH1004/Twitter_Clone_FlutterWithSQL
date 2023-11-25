@@ -61,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Column(
                         children: [
                           TextField(
+                            maxLength: 10,
                             controller: nameController,
                             decoration: InputDecoration(labelText: 'Name'),
                             keyboardType: TextInputType.name,

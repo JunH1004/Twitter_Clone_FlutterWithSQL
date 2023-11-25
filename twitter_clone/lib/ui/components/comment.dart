@@ -35,7 +35,7 @@ class _CommentState extends State<Comment> {
                         builder: (BuildContext context) =>
                             ProfilePage(widget.userID, widget.userName)));
                   }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
-                  Text('@${widget.date}', style: MyTextStyles.h3  ,)
+                  Text('@${widget.date.substring(0, 10)}', style: MyTextStyles.h3  ,)
                 ],
               ),
               Text(

@@ -85,13 +85,14 @@ class _BoardState extends State<Board> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         TextButton(onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   ProfilePage(widget.userID, widget.userName)));
                         }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
-                        Text('@${widget.date}', style: MyTextStyles.h3_o  ,)
+                        Text('@${widget.date.substring(0, 10)}', style: MyTextStyles.h3_o  , overflow: TextOverflow.fade,)
                       ],
                     ),
                     Text(
