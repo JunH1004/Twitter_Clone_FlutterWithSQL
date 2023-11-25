@@ -61,7 +61,7 @@ class _BoardState extends State<Board> {
                               builder: (BuildContext context) =>
                                   ProfilePage(widget.userID, widget.userName)));
                         }, child: Text(widget.userName,style: MyTextStyles.h2_b,)),
-                        Text('@${widget.date}', style: MyTextStyles.h2_o,)
+                        Text('@${widget.date}', style: MyTextStyles.h3  ,)
                       ],
                     ),
                     Text(

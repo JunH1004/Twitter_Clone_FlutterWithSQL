@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/user_info_provider.dart';
@@ -21,7 +22,7 @@ class _FollowBtnState extends State<FollowBtn> {
   @override
   void initState() {
     super.initState();
-    myId = UserInfoProvider().getUserId();
+    myId = context.read<UserInfoProvider>().getUserId()
   }
 
   @override
