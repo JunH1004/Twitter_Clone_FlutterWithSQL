@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
+import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
+import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
+import 'package:twitter_clone/ui/post_page.dart';
+import 'package:twitter_clone/ui/profile/profile_page.dart';
+import 'package:twitter_clone/user_info_provider.dart';
 
-Set<Set<String>> dummyContent = {
-  {'1', '이준혁', '나 이준혁 아니다',},
-  {'2', '이준민', '나 이준혁 맞다',},
-  {'3', '엄준식', '엄마가 준비한 식사는 최고야',},
-};
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -17,55 +19,63 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _mainIndex = 0;
+  int userID = 0;
+  String userName = "";
+  @override
+  void initState(){
+    super.initState();
+    userID = context.read<UserInfoProvider>().getUserId();
+    userName = context.read<UserInfoProvider>().getUserName();
+  }
   void _onItemTapped(int index) {
     setState(() {
       _mainIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Container(
-            width: 150,
-            height: 150,
-            child: Image.asset('assets/DogeCoin.png')
+    print('homepage ${userID} $userName');
+    return Container(
+      color: mainTheme.canvasColor,
+      child: SafeArea(
 
-        ),
-        elevation: 0.0,
-        backgroundColor: Colors.orangeAccent,
-        centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
-        ],
-      ),
-
-      body: Container(
-        child: Column(
-          children: [
-            Board('이준혁','2099.13.32.','나 이준혁 아니다', 1,3 ),
-            Board('LeeJunMin','2099.13.34.','가나다라마바사아자차카타파하ABCDEFGHIJK', 99,3 ),
-            Board('LeeJunMin','2099.13.34.','가나다라마바사아자차카타파하ABCDEFGHIJK가나다라마바사아자차카타파하ABCDEFGHIJK가나다라마바사아자차카타파하ABCDEFGHIJK', 99,3 ),
-          ],
-        ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _mainIndex,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled),
+        child: Scaffold(
+          body: [
+            HomepageTab(),
+            SearchTab(),
+            ProfilePage(userID, context.watch<UserInfoProvider>().getUserName())
+          ][_mainIndex],
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: mainTheme.primaryColor,
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => PostPage()));
+            },
+            child: Center(
+              child: Icon(Icons.add,size: 32,),
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
+            currentIndex: _mainIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: ""
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
               label: ""
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle),
+                  label: ""
+              ),
+            ],
+            selectedItemColor: mainTheme.primaryColor,
+            onTap: _onItemTapped,
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-          label: ""
-          ),
-        ],
-        selectedItemColor: mainTheme.primaryColor,
-        onTap: _onItemTapped,
+        ),
       ),
     );
   }
