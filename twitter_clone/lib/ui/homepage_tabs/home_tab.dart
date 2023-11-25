@@ -65,7 +65,7 @@ class _RecommandTweetsState extends State<RecommandTweets> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return SliverToBoxAdapter(
             child: Center(
-              child: Text('No tweets'),
+              child: Text("Follow other user!"),
             ),
           );
         } else {

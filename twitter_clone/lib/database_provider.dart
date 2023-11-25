@@ -336,4 +336,19 @@ class DatabaseProvider extends ChangeNotifier {
     VALUES ($user_id, $tweet_id, '$content', NOW());""";
     query(q);
   }
+
+  Future<List<Map<String, dynamic>>> search(String search_key) async {
+    String q =
+        "SELECT user_id, user_name "
+        "FROM user "
+        "WHERE user_name LIKE '%$search_key%';";
+
+    IResultSet result = await query(q);
+    List<Map<String, dynamic>> searchList = [];
+    for (final row in result.rows) {
+      searchList.add(row.assoc());
+    }
+    return searchList;
+  }
+
 }

@@ -5,13 +5,8 @@ import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/profile/profile_page.dart';
-Set<Set<String>> dummyProfiles = {
-  //user id, user name 여기는 view 사용하면 좋을듯?
-  {'1', 'Name1'},
-  {'2', 'Name2'},
-  {'3', 'Name3'},
-};
 List<Map<String, dynamic>> tweets = [];
+TextEditingController searchController = TextEditingController();
 class SearchTab extends StatefulWidget {
   const SearchTab({Key? key}) : super(key: key);
 
@@ -24,6 +19,11 @@ class _SearchTabState extends State<SearchTab> {
   @override
   void initState(){
     super.initState();
+  }
+  void _refresh(){
+    setState(() {
+
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,7 @@ class _SearchTabState extends State<SearchTab> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: searchController,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                             vertical: 16,
@@ -57,6 +58,11 @@ class _SearchTabState extends State<SearchTab> {
                           setState(() {
                             isSearch = 1;
                           });
+                      },
+                      onChanged: (value){
+                        setState(() {
+                          
+                        });
                       },
                       cursorColor: Colors.grey,
                     ),
@@ -148,30 +154,56 @@ class SearchList extends StatefulWidget {
 class _SearchListState extends State<SearchList> {
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-          return Container(
-            child: Row(
-              children: [
-                Image.asset('assets/DogeCoin.png',width: 64, height: 64,),
-                TextButton(
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ProfilePage(0, '카리나')
-                        )
-                      );
-                    },
-                    child: Text(dummyProfiles.elementAt(index).elementAt(1), style: MyTextStyles.h2_b,)
-                )
-
-              ],
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: DatabaseProvider().search(searchController.text),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
           );
-        },
-        childCount: dummyProfiles.length,
-      ),
+        } else if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('No result'),
+            ),
+          );
+        } else {
+          List<Map<String, dynamic>> searchList = snapshot.data!;
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return Container(
+                  child: Row(
+                    children: [
+                      Image.asset('assets/DogeCoin.png',width: 64, height: 64,),
+                      TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ProfilePage(int.parse(searchList[index]['user_id']), searchList[index]['user_name'])
+                            )
+                            );
+                          },
+                          child: Text(searchList[index]['user_name'], style: MyTextStyles.h2_b,)
+                      )
+
+                    ],
+                  ),
+                );
+              },
+              childCount: searchList.length,
+            ),
+          );
+        }
+      },
     );
   }
 }

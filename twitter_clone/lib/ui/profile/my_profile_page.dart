@@ -207,7 +207,7 @@ class _UserTweetsState extends State<UserTweets> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return SliverToBoxAdapter(
             child: Center(
-              child: Text('No tweets available.'),
+              child: Text("Let's Post Tweet!",),
             ),
           );
         } else {
