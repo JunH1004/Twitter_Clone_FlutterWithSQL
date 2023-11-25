@@ -222,13 +222,11 @@ class _UserTweetsState extends State<UserTweets> {
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                 return Board(
-                  0,
+                  int.parse(tweets[index]['tweet_id']),
                   int.parse(tweets[index]['user_id']),
                   tweets[index]['user_name'].toString(),
                   tweets[index]['created_at'].toString(),
                   tweets[index]['content'].toString(),
-                  1,
-                  3,
                 );
               },
               childCount: tweets.length,

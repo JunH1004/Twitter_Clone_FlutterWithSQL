@@ -22,7 +22,7 @@ class _FollowBtnState extends State<FollowBtn> {
   @override
   void initState() {
     super.initState();
-    myId = context.read<UserInfoProvider>().getUserId()
+    myId = context.read<UserInfoProvider>().getUserId();
   }
 
   @override

@@ -100,7 +100,7 @@ class DatabaseProvider extends ChangeNotifier {
     //Map< user_id:, content:, user_name:, created_at: >
 
     String q =
-        'SELECT tweet.user_id, user.user_name, tweet.content, tweet.created_at '
+        'SELECT tweet.tweet_id, tweet.user_id, user.user_name, tweet.content, tweet.created_at '
         'FROM tweet '
         'JOIN user ON tweet.user_id = user.user_id '
         'ORDER BY tweet.created_at DESC '
@@ -141,7 +141,7 @@ class DatabaseProvider extends ChangeNotifier {
     //Map< user_id:, content:, user_name:, created_at: >
 
     String q =
-        'SELECT tweet.user_id, user.user_name, tweet.content, tweet.created_at '
+        'SELECT tweet.tweet_id, tweet.user_id, user.user_name, tweet.content, tweet.created_at '
         'FROM tweet '
         'JOIN user ON tweet.user_id = user.user_id '
         'WHERE user.user_id = $user_id '
@@ -272,5 +272,45 @@ class DatabaseProvider extends ChangeNotifier {
       followings.add(row.assoc());
     }
     return followings;
+  }
+
+  Future<Map<String, dynamic>> getLikeAndCommentCnt(int tweetID) async {
+    //유저를 팔로우하는 사람!
+    String q =
+        "SELECT "
+            "(SELECT COUNT(*) FROM liked l WHERE l.tweet_id = t.tweet_id) AS like_count, "
+            "(SELECT COUNT(*) FROM comment c WHERE c.tweet_id = t.tweet_id) AS comment_count "
+        "FROM tweet t "
+        "WHERE t.tweet_id = $tweetID;";
+
+    IResultSet result =  await query(q);
+    Map<String, dynamic> a = {};
+    a = result.rows.elementAt(0).assoc();
+    return a;
+  }
+
+  Future<bool> amILiked(int myID, int tweetID) async{
+    String q =
+        "SELECT * FROM liked "
+        "WHERE user_id = $myID "
+        "AND tweet_id = $tweetID;";
+    IResultSet result = await query(q);
+    if (result.numOfRows > 0){
+      return true;
+    }
+    return false;
+  }
+  Future<void> likeTweet(int userId, int tweetId) async {
+    String q =
+        "INSERT INTO liked (user_id, tweet_id, created_at) "
+        "VALUES ($userId, $tweetId, NOW());";
+    await query(q);
+  }
+
+  Future<void> unlikeTweet(int userId, int tweetId) async {
+    String q =
+        "DELETE FROM liked "
+        "WHERE user_id = $userId AND tweet_id = $tweetId;";
+    await query(q);
   }
 }
