@@ -119,7 +119,7 @@ class _RecommandTweetsState extends State<RecommandTweets> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return SliverToBoxAdapter(
             child: Center(
-              child: Text('No tweets available.'),
+              child: Text('No tweets'),
             ),
           );
         } else {

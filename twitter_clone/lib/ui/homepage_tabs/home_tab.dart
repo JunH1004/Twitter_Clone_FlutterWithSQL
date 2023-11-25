@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/user_info_provider.dart';
@@ -46,7 +47,7 @@ class _RecommandTweetsState extends State<RecommandTweets> {
   @override
   void initState() {
     super.initState();
-    int user_id = UserInfoProvider().getUserId();
+    int user_id = context.read<UserInfoProvider>().getUserId();
     tweetsFuture = DatabaseProvider().getFollowingUserTweets(user_id,10);
   }
 
@@ -70,7 +71,7 @@ class _RecommandTweetsState extends State<RecommandTweets> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return SliverToBoxAdapter(
             child: Center(
-              child: Text('No tweets available.'),
+              child: Text('No tweets'),
             ),
           );
         } else {

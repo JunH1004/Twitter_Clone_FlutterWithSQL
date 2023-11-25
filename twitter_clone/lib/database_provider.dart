@@ -115,7 +115,7 @@ class DatabaseProvider extends ChangeNotifier {
     return tweets;
   }
   Future<List<Map<String, dynamic>>> getFollowingUserTweets(int userID, int n) async {
-    //List
+    //Listx
     //Map< user_id:, content:, user_name:, created_at: >
 
     String q =

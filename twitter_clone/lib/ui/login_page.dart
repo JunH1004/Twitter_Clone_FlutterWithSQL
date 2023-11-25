@@ -35,7 +35,10 @@ class _LogInPageState extends State<LogInPage> {
 
           //유저 id 가져오기 쿼리 and 로컬에 저장
           int user_id = await context.read<DatabaseProvider>().getUserId(email);
+          Map<String,dynamic> userInfo = await context.read<DatabaseProvider>().getUserInfo(user_id)!;
+          String userName = userInfo['user_name'];
           context.read<UserInfoProvider>().setUserId(user_id);
+          context.read<UserInfoProvider>().setUserName(userName);
           return true;
         }
         else{

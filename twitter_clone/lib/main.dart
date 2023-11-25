@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
       theme: mainTheme,
       home: Container(
           color: mainTheme.canvasColor,
-          child: const HomePage()),
+          child: const LogInPage()),
     );
   }
 }
