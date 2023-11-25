@@ -32,51 +32,60 @@ class _ProfilePageState extends State<MyProfilePage> {
       print('isME');
     }
   }
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      print('ref');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     print('my : ${widget.userId}');
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 200.0,
-            backgroundColor: mainTheme.canvasColor,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.userName, style: MyTextStyles.h2_b),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: UserFollowInfo(widget.userId, onUpdate: _updateCounts),
-                  ),
-                  Expanded(
-                      child:
-                      Container(
-                          margin: EdgeInsets.fromLTRB(64, 0, 0, 0),
-                          child:
-                          isMe == false?
-                          FollowBtn(widget.userId, onUpdate: _updateCounts)
-                              :
-                          ElevatedButton(
-                            style: MyButtonStyles.b1_off,
-                            onPressed: () {},
-                            child: Text("Edit profile", style: MyTextStyles.h3_w),
-                          )
-                      )
-                  ),
-                ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 200.0,
+              backgroundColor: mainTheme.canvasColor,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(widget.userName, style: MyTextStyles.h2_b),
               ),
             ),
-          ),
-          UserTweets(widget.userId),
-        ],
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: UserFollowInfo(widget.userId, onUpdate: _updateCounts),
+                    ),
+                    Expanded(
+                        child:
+                        Container(
+                            margin: EdgeInsets.fromLTRB(64, 0, 0, 0),
+                            child:
+                            isMe == false?
+                            FollowBtn(widget.userId, onUpdate: _updateCounts)
+                                :
+                            ElevatedButton(
+                              style: MyButtonStyles.b1_off,
+                              onPressed: () {},
+                              child: Text("Edit profile", style: MyTextStyles.h3_w),
+                            )
+                        )
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            UserTweets(widget.userId),
+          ],
+        ),
       ),
     );
   }
@@ -178,18 +187,10 @@ class UserTweets extends StatefulWidget {
 }
 
 class _UserTweetsState extends State<UserTweets> {
-  Future<List<Map<String, dynamic>>>? tweetsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    tweetsFuture = DatabaseProvider().getUserTweets(widget.userID);
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: tweetsFuture,
+      future: DatabaseProvider().getUserTweets(widget.userID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SliverToBoxAdapter(
