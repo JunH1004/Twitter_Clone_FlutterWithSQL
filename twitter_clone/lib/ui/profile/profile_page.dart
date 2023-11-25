@@ -7,12 +7,12 @@ import 'package:twitter_clone/ui/components/follow_btn.dart';
 import 'package:twitter_clone/ui/profile/following_list_page.dart';
 import 'package:twitter_clone/user_info_provider.dart';
 
+import '../config_page.dart';
 import 'follower_list_page.dart';
 
 class ProfilePage extends StatefulWidget {
   int userId;
   String userName;
-
   ProfilePage(this.userId, this.userName);
 
   @override
@@ -21,8 +21,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isMe = false;
-  int followingCount = 0;
-  int followerCount = 0;
 
   @override
   void initState() {
@@ -31,6 +29,14 @@ class _ProfilePageState extends State<ProfilePage> {
       isMe = true;
       print('isME');
     }
+    getUserIntro();
+  }
+  Future<void> getUserIntro() async {
+    Map<String, dynamic> userInfo = await context.read<DatabaseProvider>().getUserInfo(widget.userId);
+    setState(() {
+      String intro = userInfo['intro'] ?? "";
+      context.read<UserInfoProvider>().setIntro(intro);
+    });
   }
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
@@ -53,36 +59,48 @@ class _ProfilePageState extends State<ProfilePage> {
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(widget.userName, style: MyTextStyles.h2_b),
               ),
-              leading: IconButton(
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
                 icon: Icon(Icons.keyboard_arrow_left, color: MyColors.black),
                 onPressed: () {
-                  Navigator.pop(context, (route) => route.isFirst);
+                  Navigator.pop(context);
                 },
-              ),
+              )
+                  : null,
             ),
             SliverToBoxAdapter(
               child: Container(
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    Expanded(
-                      child: UserFollowInfo(widget.userId, onUpdate: _updateCounts),
-                    ),
-                    Expanded(
-                      child:
-                          Container(
-                            margin: EdgeInsets.fromLTRB(64, 0, 0, 0),
-                            child:
-                              isMe == false?
-                              FollowBtn(widget.userId, onUpdate: _updateCounts)
-                              :
-                              ElevatedButton(
-                                style: MyButtonStyles.b1_off,
-                                onPressed: () {},
-                                child: Text("Edit profile", style: MyTextStyles.h3_w),
+                    Text(context.watch<UserInfoProvider>().getIntro(), style: MyTextStyles.h3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: UserFollowInfo(widget.userId, onUpdate: _updateCounts),
+                        ),
+                        Expanded(
+                          child:
+                              Container(
+                                margin: EdgeInsets.fromLTRB(64, 0, 0, 0),
+                                child:
+                                  isMe == false?
+                                  FollowBtn(widget.userId, onUpdate: _updateCounts)
+                                  :
+                                  ElevatedButton(
+                                    style: MyButtonStyles.b1_off,
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ConfigPage()
+                                      ));
+                                    },
+                                    child: Text("Edit profile", style: MyTextStyles.h3_w),
+                                  )
                               )
-                          )
+                        ),
+                      ],
                     ),
                   ],
                 ),

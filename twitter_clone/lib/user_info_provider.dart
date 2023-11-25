@@ -4,6 +4,7 @@ import 'package:twitter_clone/database_provider.dart';
 class UserInfoProvider extends ChangeNotifier {
   int _userId = 1;
   String _userName = "Lee";
+  String _intro = "";
   int getUserId(){
     return _userId;
   }
@@ -18,4 +19,13 @@ class UserInfoProvider extends ChangeNotifier {
     _userName = s;
     notifyListeners();
   }
+
+  String getIntro(){
+    return _intro;
+  }
+  void setIntro(String s)  {
+    _intro = s;
+    notifyListeners();
+  }
+
 }

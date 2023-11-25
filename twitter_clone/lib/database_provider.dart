@@ -5,7 +5,7 @@ class DatabaseProvider extends ChangeNotifier {
 
 
   Future<void> dbConnector() async {
-    print("Connecting to mysql server...");
+    //print("Connecting to mysql server...");
 
     // MySQL 접속 설정
     final conn = await MySQLConnection.createConnection(
@@ -16,7 +16,7 @@ class DatabaseProvider extends ChangeNotifier {
       databaseName: 'dogetest', // optional
     );
     await conn.connect();
-    print("connected");
+    //print("connected");
   }
 
 
@@ -38,7 +38,7 @@ class DatabaseProvider extends ChangeNotifier {
     return result;
   }
   Future<List<IResultSet>> queryToList(String q) async {
-    print('query : ' + q);
+    //print('query : ' + q);
     // MySQL 접속 설정
     final conn = await MySQLConnection.createConnection(
       host: 'localhost',
@@ -83,7 +83,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<int> getUserId(String user_email) async {
     IResultSet result = await query("SELECT user_id FROM user WHERE email = '$user_email'");
     if (result.numOfRows > 0){
-      print('user_id : ${int.parse(result.rows.elementAt(0).colAt(0).toString())}');
+      //print('user_id : ${int.parse(result.rows.elementAt(0).colAt(0).toString())}');
       return int.parse(result.rows.elementAt(0).colAt(0).toString());
     }
     return -1;
@@ -110,7 +110,7 @@ class DatabaseProvider extends ChangeNotifier {
     for (final row in result.rows) {
       // for every row in result set
       tweets.add(row.assoc());
-      print(row.assoc());
+      //print(row.assoc());
     }
     return tweets;
   }
@@ -131,7 +131,7 @@ class DatabaseProvider extends ChangeNotifier {
     for (final row in result.rows) {
       // for every row in result set
       tweets.add(row.assoc());
-      print(row.assoc());
+      //print(row.assoc());
     }
     return tweets;
   }
@@ -151,7 +151,7 @@ class DatabaseProvider extends ChangeNotifier {
     for (final row in result.rows) {
       // for every row in result set
       tweets.add(row.assoc());
-      print(row.assoc());
+      //print(row.assoc());
     }
     return tweets;
   }
@@ -228,7 +228,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<Map<String, dynamic>> getUserInfo(int user_id) async {
 
     String q =
-        "SELECT user_id, email, user_name, follower_cnt, following_cnt "
+        "SELECT user_id, email, user_name, follower_cnt, following_cnt, intro "
         "FROM user "
         "WHERE user_id = $user_id;";
 
@@ -236,7 +236,7 @@ class DatabaseProvider extends ChangeNotifier {
     Map<String, dynamic> user_info = {};
     for (final row in result.rows) {
       user_info = row.assoc();
-      print(row.assoc());
+      //print(row.assoc());
     }
     return user_info;
   }
@@ -253,7 +253,7 @@ class DatabaseProvider extends ChangeNotifier {
     List<Map<String, dynamic>> followings = [];
     for (final row in result.rows) {
       followings.add(row.assoc());
-      print(row.assoc());
+      //print(row.assoc());
     }
     return followings;
   }
@@ -349,6 +349,14 @@ class DatabaseProvider extends ChangeNotifier {
       searchList.add(row.assoc());
     }
     return searchList;
+  }
+
+  Future<void> updateUserInfo(int user_id, String user_name, String intro) async {
+    String q =
+        "UPDATE user "
+        "SET user_name = '$user_name', intro = '$intro' "
+        "WHERE user_id = $user_id;";
+    query(q);
   }
 
 }

@@ -53,6 +53,12 @@ class MyButtonStyles{
     backgroundColor: mainTheme.canvasColor,
       side: BorderSide(width: 1, color: Colors.black)
   );
+  static final b3 = FilledButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32.0),
+      ),
+      backgroundColor: Colors.redAccent,
+  );
 }
 
 class CardStyles{

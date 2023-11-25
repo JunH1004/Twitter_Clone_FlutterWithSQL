@@ -6,7 +6,6 @@ import 'package:twitter_clone/ui/board.dart';
 import 'package:twitter_clone/ui/homepage_tabs/home_tab.dart';
 import 'package:twitter_clone/ui/homepage_tabs/search_tab.dart';
 import 'package:twitter_clone/ui/post_page.dart';
-import 'package:twitter_clone/ui/profile/my_profile_page.dart';
 import 'package:twitter_clone/ui/profile/profile_page.dart';
 import 'package:twitter_clone/user_info_provider.dart';
 
@@ -44,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           body: [
             HomepageTab(),
             SearchTab(),
-            MyProfilePage(userID, userName)
+            ProfilePage(userID, context.watch<UserInfoProvider>().getUserName())
           ][_mainIndex],
           floatingActionButton: FloatingActionButton(
             backgroundColor: mainTheme.primaryColor,
