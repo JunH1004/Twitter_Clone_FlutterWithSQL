@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/main_style.dart';
 import 'package:twitter_clone/ui/board.dart';
+import 'package:twitter_clone/user_info_provider.dart';
+
+import '../../database_provider.dart';
 
 class HomepageTab extends StatefulWidget {
   const HomepageTab({Key? key}) : super(key: key);
@@ -11,22 +14,6 @@ class HomepageTab extends StatefulWidget {
 }
 
 class _HomepageTabState extends State<HomepageTab> {
-  Set<Set<String>> dummyTweets = {
-    //내가 팔로우 하는 사람들만
-    //tweet id, user id, content, created at
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-    {'1', 'Name', 'Content', '2004.02.18'},
-  };
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -40,23 +27,72 @@ class _HomepageTabState extends State<HomepageTab> {
             background: Image.asset('assets/musk.jpg',width: 400,height: 400,fit: BoxFit.fitWidth,),
           ),
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-              return Board(
-                0,
-                1,
-                dummyTweets.elementAt(index).elementAt(1), // 인덱스 1이 사용자 이름이라고 가정합니다
-                dummyTweets.elementAt(index).elementAt(3),
-                dummyTweets.elementAt(index).elementAt(2), // 인덱스 2가 트윗 내용이라고 가정합니다
-                0,
-                0,
-              );
-            },
-            childCount: dummyTweets.length,
-          ),
-        ),
+        RecommandTweets(),
       ],
+    );
+  }
+}
+
+class RecommandTweets extends StatefulWidget {
+  const RecommandTweets({Key? key}) : super(key: key);
+
+  @override
+  State<RecommandTweets> createState() => _RecommandTweetsState();
+}
+
+class _RecommandTweetsState extends State<RecommandTweets> {
+  Future<List<Map<String, dynamic>>>? tweetsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    int user_id = UserInfoProvider().getUserId();
+    tweetsFuture = DatabaseProvider().getFollowingUserTweets(user_id,10);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: tweetsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('No tweets available.'),
+            ),
+          );
+        } else {
+          List<Map<String, dynamic>> tweets = snapshot.data!;
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return Board(
+                  0,
+                  int.parse(tweets[index]['user_id']),
+                  tweets[index]['user_name'].toString(),
+                  tweets[index]['created_at'].toString(),
+                  tweets[index]['content'].toString(),
+                  1,
+                  3,
+                );
+              },
+              childCount: tweets.length,
+            ),
+          );
+        }
+      },
     );
   }
 }

@@ -114,6 +114,27 @@ class DatabaseProvider extends ChangeNotifier {
     }
     return tweets;
   }
+  Future<List<Map<String, dynamic>>> getFollowingUserTweets(int userID, int n) async {
+    //List
+    //Map< user_id:, content:, user_name:, created_at: >
+
+    String q =
+        "SELECT tweet.tweet_id, tweet.user_id, user.user_name, tweet.content, tweet.created_at "
+        "FROM tweet "
+        "JOIN following ON tweet.user_id = following.following_id "
+        "JOIN user ON tweet.user_id = user.user_id "
+        "WHERE following.user_id = $userID "
+        "ORDER BY tweet.created_at DESC "
+        "LIMIT $n;";
+    IResultSet result =  await query(q);
+    List<Map<String, dynamic>> tweets = [];
+    for (final row in result.rows) {
+      // for every row in result set
+      tweets.add(row.assoc());
+      print(row.assoc());
+    }
+    return tweets;
+  }
 
   Future<List<Map<String, dynamic>>> getUserTweets(int user_id) async {
     //List
