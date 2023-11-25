@@ -28,6 +28,8 @@ class MyTextStyles{
   static final h2_o = TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 24,fontWeight: FontWeight.normal);
   static final h2_b = TextStyle(color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold);
   static final h3 = TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal);
+  static final h3_o = TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 16,fontWeight: FontWeight.normal);
+
   static final h3_w = TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.normal);
   static final h4 = TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.normal);
   static final h4_w = TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.normal);
