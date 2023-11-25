@@ -91,18 +91,11 @@ class RecommandTweets extends StatefulWidget {
 }
 
 class _RecommandTweetsState extends State<RecommandTweets> {
-  Future<List<Map<String, dynamic>>>? tweetsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    tweetsFuture = DatabaseProvider().getLatestTweets(10);
-  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: tweetsFuture,
+      future: DatabaseProvider().getLatestTweets(10),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SliverToBoxAdapter(

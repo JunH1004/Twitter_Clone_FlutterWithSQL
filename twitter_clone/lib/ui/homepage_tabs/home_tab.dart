@@ -42,19 +42,13 @@ class RecommandTweets extends StatefulWidget {
 }
 
 class _RecommandTweetsState extends State<RecommandTweets> {
-  Future<List<Map<String, dynamic>>>? tweetsFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    int user_id = context.read<UserInfoProvider>().getUserId();
-    tweetsFuture = DatabaseProvider().getFollowingUserTweets(user_id,10);
-  }
 
   @override
   Widget build(BuildContext context) {
+    int user_id = context.read<UserInfoProvider>().getUserId();
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: tweetsFuture,
+      future: DatabaseProvider().getFollowingUserTweets(user_id,10),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SliverToBoxAdapter(

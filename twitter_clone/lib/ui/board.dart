@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/database_provider.dart';
 import 'package:twitter_clone/main_style.dart';
+import 'package:twitter_clone/ui/board_detail.dart';
 import 'package:twitter_clone/ui/profile/profile_page.dart';
 import 'package:twitter_clone/user_info_provider.dart';
 
@@ -122,7 +123,12 @@ class _BoardState extends State<Board> {
               )
               ,
               Text(widget.likeCnt.toString()),
-              IconButton(onPressed: (){}, icon: Icon(Icons.comment)),
+              IconButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        BoardDetailPage(widget.tweetID, widget.userID, widget.userName, widget.date, widget.content)
+                ));
+              }, icon: Icon(Icons.comment)),
               Text(widget.commentCnt.toString(),
               ),
             ],

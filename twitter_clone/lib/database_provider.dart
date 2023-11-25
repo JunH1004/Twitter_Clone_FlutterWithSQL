@@ -21,7 +21,7 @@ class DatabaseProvider extends ChangeNotifier {
 
 
   Future<IResultSet> query(String q) async {
-    print('query : ' + q);
+    //print('query : ' + q);
     // MySQL 접속 설정
     final conn = await MySQLConnection.createConnection(
       host: 'localhost',
@@ -312,5 +312,28 @@ class DatabaseProvider extends ChangeNotifier {
         "DELETE FROM liked "
         "WHERE user_id = $userId AND tweet_id = $tweetId;";
     await query(q);
+  }
+
+  Future<List<Map<String, dynamic>>> getComments(int tweet_id) async {
+    String q =
+        "SELECT c.comment_id, c.user_id, u.user_name, c.content, c.created_at "
+        "FROM comment c "
+        "JOIN user u ON c.user_id = u.user_id "
+        "WHERE c.tweet_id = $tweet_id "
+        "ORDER BY c.created_at DESC ;";
+
+    IResultSet result = await query(q);
+    List<Map<String, dynamic>> comments = [];
+    for (final row in result.rows) {
+      comments.add(row.assoc());
+    }
+    return comments;
+  }
+
+  Future<void> replyComment(int user_id, int tweet_id, String content) async{
+    String q =
+    """INSERT INTO comment (user_id, tweet_id, content, created_at) 
+    VALUES ($user_id, $tweet_id, '$content', NOW());""";
+    query(q);
   }
 }
